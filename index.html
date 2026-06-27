@@ -4,6 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Isra Bouchentouf // Independent Medical AI Researcher</title>
+    <!-- 🚀 استدعاء المكتبة الرسمية المستقرة والمحمية لربط الـ API السحابي مباشرة -->
+    <script type="module">
+        import { Client } from "https://jsdelivr.net";
+        window.GradioClient = Client;
+    </script>
     <style>
         body { background-color: #000000; color: #c5c6c7; font-family: 'Consolas', 'Courier New', monospace; margin: 0; padding: 0; }
         .container { max-width: 1000px; margin: 0 auto; padding: 40px 20px; }
@@ -13,16 +18,15 @@
         .bio-section { line-height: 1.7; font-size: 14px; margin-bottom: 40px; border-left: 3px solid #45a29e; padding-left: 20px; text-align: justify; }
         .dashboard-title { color: #66fcf1; font-size: 18px; margin-bottom: 15px; text-transform: uppercase; border-top: 1px solid #1f2833; padding-top: 30px; letter-spacing: 0.5px; }
         
-        /* تصميم الإطار السحابي المتطور لدمج اللوحة الطبية الرسمية من هافينغ فيس بأمان */
-        .mri-frame { 
-            width: 100%; 
-            height: 750px; 
-            border: 1px solid #1f2833; 
-            background-color: #0b0c10; 
-            border-radius: 4px; 
-            box-shadow: 0px 0px 20px rgba(102,252,241,0.05); 
-        }
-        
+        .clinical-panel { background-color: #0b0c10; border: 1px solid #1f2833; border-radius: 4px; padding: 30px; box-shadow: 0px 0px 20px rgba(102,252,241,0.05); display: flex; gap: 30px; }
+        .panel-col { flex: 1; display: flex; flex-direction: column; }
+        .scanner-screen { width: 100%; height: 300px; border: 1px solid #1f2833; background-color: #000; display: flex; justify-content: center; align-items: center; font-size: 12px; color: #45a29e; position: relative; }
+        .scanner-screen img { max-width: 100%; max-height: 100%; object-fit: contain; }
+        .primary-btn { background-color: #45a29e; color: #000; font-weight: bold; border: none; padding: 12px; margin-top: 15px; cursor: pointer; text-transform: uppercase; font-family: inherit; letter-spacing: 1px; width: 100%; }
+        .primary-btn:hover { background-color: #66fcf1; }
+        .file-input { display: none; }
+        .verdict-box { background-color: #000; border: 1px solid #1f2833; padding: 15px; height: 100%; display: flex; flex-direction: column; justify-content: center; font-size: 14px; line-height: 1.8; min-height: 200px; }
+        .verdict-title { color: #66fcf1; font-weight: bold; margin-bottom: 10px; text-transform: uppercase; }
         footer { margin-top: 60px; border-top: 1px solid #1f2833; padding-top: 20px; font-size: 11px; color: #45a29e; text-align: center; text-transform: uppercase; letter-spacing: 0.5px; }
         a { color: #66fcf1; text-decoration: none; font-weight: bold; }
         a:hover { text-decoration: underline; color: #45a29e; }
@@ -31,13 +35,13 @@
 <body>
 
     <div class="container">
-        <!-- Professional Header -->
+        <!-- Header -->
         <header>
             <h1>ISRA BOUCHENTOUF</h1>
             <h2>INDEPENDENT AI RESEARCHER & PIPELINE ENGINEER // MEDICAL IMAGING UNIT</h2>
         </header>
 
-        <!-- Academic Bio -->
+        <!-- Bio -->
         <div class="bio-section">
             As a 14-year-old independent Algerian AI researcher and programmer, I focus on engineering deep learning architectures to tackle clinical visualization challenges in digital healthcare and bio-imaging analysis.
             <br><br>
@@ -46,17 +50,101 @@
             You can evaluate my full portfolio and follow academic updates via my official <a href="https://linkedin.com" target="_blank">LinkedIn</a> network, or audit the complete codebase and technical documentation via my <a href="https://github.com" target="_blank">GitHub</a> repository.
         </div>
 
-        <!-- Integrated Live Scanner Panel -->
-        <div class="dashboard-title">CLINICAL MRI DIAGNOSIS PANEL // LIVE EMBEDDED SYSTEM INTERFACE</div>
+        <div class="dashboard-title">CLINICAL MRI DIAGNOSIS PANEL // LIVE EMBEDDED SYSTEM INTERFACE (API POWERED)</div>
         
-        <!-- 📥 الجسر الرقمي الآمن لربط مساحتكِ الجاهزة بنجاح وبمظهر مظلم مدمج 100% -->
-        <iframe src="https://huggingface.co" title="MRI Diagnosis Engine" class="mri-frame" frameborder="0"></iframe>
+        <div class="clinical-panel">
+            <div class="panel-col">
+                <div class="scanner-screen" id="screen">
+                    <span id="placeholder">[ SYSTEM READY: AWAITING MRI SCAN INPUT ]</span>
+                    <img id="preview" style="display:none;"/>
+                </div>
+                <input type="file" id="filePicker" class="file-input" accept="image/*"/>
+                <button class="primary-btn" onclick="document.getElementById('filePicker').click()">LOAD MRI IMAGE</button>
+                <button class="primary-btn" id="runBtn" style="background-color: #313244; color: #c5c6c7;" disabled onclick="runInference()">RUN AI DIAGNOSIS</button>
+            </div>
+            <div class="panel-col">
+                <div class="verdict-box">
+                    <div class="verdict-title">// DIAGNOSIS VERDICT MATRIX</div>
+                    <div id="output">SYSTEM STATUS: ACTIVE<br>READY FOR CLINICAL INPUT.</div>
+                </div>
+            </div>
+        </div>
 
-        <!-- Professional Copyright Footer -->
         <footer>
             © 2026 COPYRIGHTED BY ISRA BOUCHENTOUF // ALL RIGHTS RESERVED // INDEPENDENT MEDICAL AI RESEARCH
         </footer>
     </div>
 
+    <!-- 🧠 كود المعالجة المحدث والمحكم للإرسال السحابي الصحيح -->
+    <script>
+        let uploadedFileObject = null;
+        let filePicker = document.getElementById('filePicker');
+        let imageElement = document.getElementById('preview');
+        let placeholder = document.getElementById('placeholder');
+        let outputBox = document.getElementById('output');
+        let runBtn = document.getElementById('runBtn');
+
+        filePicker.addEventListener('change', function(e) {
+            let file = e.target.files[0]; // 🎯 إصلاح حاسم: التقاط الملف الفعلي نفسه وليس مصفوفة الملفات
+            if (file) {
+                uploadedFileObject = file; // تخزين كائن الملف لإرساله للـ API
+                let reader = new FileReader();
+                reader.onload = function(event) {
+                    imageElement.src = event.target.result;
+                    imageElement.style.display = 'block';
+                    placeholder.style.display = 'none';
+                    runBtn.disabled = false;
+                    runBtn.style.backgroundColor = "#45a29e";
+                    runBtn.style.color = "#000";
+                    outputBox.innerHTML = "IMAGE LOADED.<br>CLICK 'RUN AI DIAGNOSIS' TO START SCAN ANALYSIS.";
+                }
+                reader.readAsDataURL(file);
+            }
+        });
+
+        async function runInference() {
+            if (!uploadedFileObject || !window.GradioClient) {
+                outputBox.innerHTML = "<span style='color: #f38ba8;'>ERROR:</span> AI CORE NOT INITIALIZED YET. REFRESH PAGE.";
+                return;
+            }
+            outputBox.innerHTML = "CONNECTING TO SATELLITE CORE...<br>ANALYZING MRI ANATOMY IN CLOUD...<br>PLEASE AWAIT VERDICT.";
+            runBtn.disabled = true;
+            runBtn.style.backgroundColor = "#313244";
+
+            try {
+                // الاتصال بالمحرك السحابي النشط
+                const app = await window.GradioClient.connect("Isra-Bouchentouf/Brain-Tumor-AI-Diagnosis");
+                
+                // إرسال كائن الملف الفعلي المعتمد للدالة الأساسية /lambda
+                const result = await app.predict("/lambda", {
+                    image: uploadedFileObject,
+                });
+
+                let rawData = result.data[0]; // جلب قاموس الاحتمالات المئوية
+                let sortedOutput = "";
+                
+                // ترتيب الفئات تصاعدياً لتطبع الأعلى دقة فوق
+                let sortedClasses = Object.entries(rawData).sort((a, b) => b[1] - a[1]);
+                let topVerdict = sortedClasses[0][0];
+                let topConfidence = (sortedClasses[0][1] * 100).toFixed(2);
+
+                sortedOutput += `<span style="color: #66fcf1; font-weight:bold; font-size:16px;">FINAL DIAGNOSIS: ${topVerdict}</span><br>`;
+                sortedOutput += `CORE VERDICT CONFIDENCE: ${topConfidence}%<br>`;
+                sortedOutput += `---------------------------------------<br>`;
+                sortedOutput += `// FULL PROBABILITY MATRIX:<br>`;
+                
+                for (let [className, val] of sortedClasses) {
+                    sortedOutput += `> ${className}: ${(val * 100).toFixed(2)}%<br>`;
+                }
+                outputBox.innerHTML = sortedOutput + `---------------------------------------<br>// ANALYSIS COMPLETE // TARGET ANATOMY RESOLVED.`;
+
+            } catch (error) {
+                outputBox.innerHTML = "<span style='color: #f38ba8;'>CRITICAL SERVICE ERROR:</span><br>" + error.message;
+            } finally {
+                runBtn.disabled = false;
+                runBtn.style.backgroundColor = "#45a29e";
+            }
+        }
+    </script>
 </body>
 </html>
