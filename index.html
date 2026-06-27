@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Isra Bouchentouf // Independent Medical AI Researcher</title>
-    <!-- 🚀 اسْتِدْعاءُ مَكْتَبَةِ الـ API العالَمِيَّةِ لِتَشْغِيلِ الـمُحَرِّكِ السَّحابِيِّ فَوْراً عَبْرَ الـمُتَصَفِّحِ -->
+    <!-- 🚀 استدعاء مكتبة الـ API العالمية لتشغيل المحرك السحابي فوراً عبر المتصفح -->
     <script type="module">
         import { Client } from "https://jsdelivr.net";
         window.GradioClient = Client;
@@ -18,7 +18,7 @@
         .bio-section { line-height: 1.7; font-size: 14px; margin-bottom: 40px; border-left: 3px solid #45a29e; padding-left: 20px; text-align: justify; }
         .dashboard-title { color: #66fcf1; font-size: 18px; margin-bottom: 15px; text-transform: uppercase; border-top: 1px solid #1f2833; padding-top: 30px; letter-spacing: 0.5px; }
         
-        /* تَصْمِيمُ لَوْحَةِ الفَحْصِ الطِّبِّيَّةِ الـمَدْمُوجَةِ بِالـ API خَلْفَ الكَوالِيسِ */
+        /* تصميم لوحة الفحص الطبية المدمجة بالـ API خلف الكواليس */
         .clinical-panel { background-color: #0b0c10; border: 1px solid #1f2833; border-radius: 4px; padding: 30px; box-shadow: 0px 0px 20px rgba(102,252,241,0.05); display: flex; gap: 30px; }
         .panel-col { flex: 1; display: flex; flex-direction: column; }
         .scanner-screen { width: 100%; height: 300px; border: 1px solid #1f2833; background-color: #000; display: flex; justify-content: center; align-items: center; font-size: 12px; color: #45a29e; position: relative; }
@@ -78,7 +78,7 @@
         </footer>
     </div>
 
-    <!-- 🧠 كود الـ جافا سكريبت الـمُطوَّر لِرَبْطِ الـ API السَّحابِيِّ صامِتاً مَعَ Hugging Face -->
+    <!-- 🧠 كود الجافا سكريبت المحدث لربط مسار الـ API السليم تلقائياً -->
     <script>
         let imageBlob = null;
         let filePicker = document.getElementById('filePicker');
@@ -87,7 +87,6 @@
         let outputBox = document.getElementById('output');
         let runBtn = document.getElementById('runBtn');
 
-        // تَفَقُّدُ اتِّصالِ الـمُحَرِّكِ فَوْرَ فَتْحِ الـمَوْقِعِ
         window.addEventListener('load', () => {
             outputBox.innerHTML = "SYSTEM STATUS: ACTIVE<br>READY FOR CLINICAL INPUT.";
         });
@@ -95,7 +94,7 @@
         filePicker.addEventListener('change', function(e) {
             let file = e.target.files[0];
             if (file) {
-                imageBlob = file; // حِفْظُ الـمَلَفِّ لِإرْسالِهِ لِلْـ API
+                imageBlob = file; 
                 let reader = new FileReader();
                 reader.onload = function(event) {
                     imageElement.src = event.target.result;
@@ -110,7 +109,7 @@
             }
         });
 
-        // 🚀 الاتِّصالُ الـحَقِيقِيُّ والـمُباشِرُ بِـ الـ API الخاصِّ بِكِ
+        // 🚀 محرك الاتصال المطور بالـ /lambda endpoint المعتمد
         async function runInference() {
             if (!imageBlob) return;
             outputBox.innerHTML = "CONNECTING TO SATELLITE CORE...<br>PROCESSING SCAN ANATOMY IN CLOUD...<br>PLEASE AWAIT RESOLUTION.";
@@ -118,19 +117,18 @@
             runBtn.style.backgroundColor = "#313244";
 
             try {
-                // الاتِّصالُ بِالـ Space الـخاصَّةِ بِكِ طِبْقاً لِلْـ API الـمَعْروضِ أَمامَكِ
+                // الاتصال بـ الـ Space الخاصة بكِ
                 const app = await window.GradioClient.connect("Isra-Bouchentouf/Brain-Tumor-AI-Diagnosis");
                 
-                // إرْسالُ الـصُّورَةِ لِدالَّةِ التَّشْخِيصِ
-                const result = await app.predict("/diagnose_mri", {
+                // 🔥 التعديل السحري: استدعاء دالة /lambda المعتمدة طبقا لمخرجات نظامكِ
+                const result = await app.predict("/lambda", {
                     image: imageBlob,
                 });
 
-                // تَلَقِّي وتَنْسِيقُ مَصْفُوفَةِ الِاحْتِمالاتِ الـخارِقَةِ الخاصَّةِ بِنَمُوذَجِكِ (95%)
-                let data = result.data[0]; // جَلْبُ الـقامُوسِ النَّاتِجِ
+                let data = result.data[0]; // جلب قاموس التوقعات المئوية
                 let sortedOutput = "";
                 
-                // تَرْتِيبُ النَّتائِجِ لِتَظْهَرَ النِّسْبَةُ الأَعْلَى في البِدايَةِ كَأَمْرٍ جِرَاحِيٍّ صَارِمٍ
+                // ترتيب الاحتمالات مئوياً ليظهر الورم الأعلى تشخيصاً في البداية
                 let sortedClasses = Object.entries(data).sort((a, b) => b[1] - a[1]);
                 
                 let topVerdict = sortedClasses[0][0];
