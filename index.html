@@ -4,8 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Isra Bouchentouf // Independent Medical AI Researcher</title>
-    <!-- استدعاء المحرك العالمي لتشغيل الذكاء الاصطناعي مباشرة في المتصفح -->
-    <script src="https://jsdelivr.net"></script>
     <style>
         body { background-color: #000000; color: #c5c6c7; font-family: 'Consolas', 'Courier New', monospace; margin: 0; padding: 0; }
         .container { max-width: 1000px; margin: 0 auto; padding: 40px 20px; }
@@ -15,16 +13,9 @@
         .bio-section { line-height: 1.7; font-size: 14px; margin-bottom: 40px; border-left: 3px solid #45a29e; padding-left: 20px; text-align: justify; }
         .dashboard-title { color: #66fcf1; font-size: 18px; margin-bottom: 15px; text-transform: uppercase; border-top: 1px solid #1f2833; padding-top: 30px; letter-spacing: 0.5px; }
         
-        /* تصميم لوحة الفحص الطبية الجادة المدمجة بالكامل */
-        .clinical-panel { background-color: #0b0c10; border: 1px solid #1f2833; border-radius: 4px; padding: 30px; box-shadow: 0px 0px 20px rgba(102,252,241,0.05); display: flex; gap: 30px; }
-        .panel-col { flex: 1; display: flex; flex-direction: column; }
-        .scanner-screen { width: 100%; height: 300px; border: 1px solid #1f2833; background-color: #000; display: flex; justify-content: center; align-items: center; font-size: 12px; color: #45a29e; position: relative; }
-        .scanner-screen img { max-width: 100%; max-height: 100%; object-fit: contain; }
-        .primary-btn { background-color: #45a29e; color: #000; font-weight: bold; border: none; padding: 12px; margin-top: 15px; cursor: pointer; text-transform: uppercase; font-family: inherit; letter-spacing: 1px; width: 100%; }
-        .primary-btn:hover { background-color: #66fcf1; }
-        .file-input { display: none; }
-        .verdict-box { background-color: #000; border: 1px solid #1f2833; padding: 15px; height: 100%; display: flex; flex-direction: column; justify-content: center; font-size: 14px; line-height: 1.8; }
-        .verdict-title { color: #66fcf1; font-weight: bold; margin-bottom: 10px; text-transform: uppercase; }
+        /* تصميم الإطار السحابي المتطور لدمج الشاشة الطبية الرسمية */
+        .mri-frame { width: 100%; height: 750px; border: 1px solid #1f2833; background-color: #0b0c10; border-radius: 4px; box-shadow: 0px 0px 20px rgba(102,252,241,0.05); }
+        
         footer { margin-top: 60px; border-top: 1px solid #1f2833; padding-top: 20px; font-size: 11px; color: #45a29e; text-align: center; text-transform: uppercase; letter-spacing: 0.5px; }
         a { color: #66fcf1; text-decoration: none; font-weight: bold; }
         a:hover { text-decoration: underline; color: #45a29e; }
@@ -49,25 +40,10 @@
         </div>
 
         <!-- Integrated Live Scanner Panel -->
-        <div class="dashboard-title">CLINICAL MRI DIAGNOSIS PANEL // LIVE EMBEDDED SYSTEM Interface</div>
+        <div class="dashboard-title">CLINICAL MRI DIAGNOSIS PANEL // LIVE EMBEDDED INTERFACE</div>
         
-        <div class="clinical-panel">
-            <div class="panel-col">
-                <div class="scanner-screen" id="screen">
-                    <span id="placeholder">[ SYSTEM READY: AWAITING MRI SCAN INPUT ]</span>
-                    <img id="preview" style="display:none;"/>
-                </div>
-                <input type="file" id="filePicker" class="file-input" accept="image/*"/>
-                <button class="primary-btn" onclick="document.getElementById('filePicker').click()">LOAD MRI IMAGE</button>
-                <button class="primary-btn" id="runBtn" style="background-color: #313244; color: #c5c6c7;" disabled onclick="runInference()">RUN AI DIAGNOSIS</button>
-            </div>
-            <div class="panel-col">
-                <div class="verdict-box">
-                    <div class="verdict-title">// DIAGNOSIS VERDICT MATRIX</div>
-                    <div id="output">SYSTEM STATUS: IDLE<br>AWAITING CORE INITIALIZATION...</div>
-                </div>
-            </div>
-        </div>
+        <!-- 📥 الجسر الرقمي الآمن والمدمج بالكامل لربط مساحتكِ الحالية بنجاح -->
+        <iframe src="https://huggingface.co" title="Brain-Tumor-AI-Diagnosis" class="mri-frame" frameborder="0"></iframe>
 
         <!-- Professional Copyright Footer -->
         <footer>
@@ -75,64 +51,5 @@
         </footer>
     </div>
 
-    <!-- كود الجافا سكريبت الطبي لتشغيل الـ ONNX محلياً داخل المتصفح -->
-    <script>
-        let session = null;
-        let imageElement = document.getElementById('preview');
-        let filePicker = document.getElementById('filePicker');
-        let outputBox = document.getElementById('output');
-        let runBtn = document.getElementById('runBtn');
-
-        // 1. شحن موديل الـ ONNX الذكي فور فتح الموقع
-        async function loadModel() {
-            outputBox.innerHTML = "INITIALIZING CORE EXPERT ENGINE... PLEASE WAIT.";
-            try {
-                // استدعاء ملف الـ onnx المرفوع بجانب الصفحة على جيت هاب
-                session = await ort.InferenceSession.create('./brain_tumor_model.onnx');
-                outputBox.innerHTML = "SYSTEM STATUS: ACTIVE<br>CORE ENGINE LOADED SUCCESSFULLY.<br>READY FOR CLINICAL INPUT.";
-            } catch (e) {
-                outputBox.innerHTML = "CRITICAL ERROR: FAILED TO LOAD THE AI CORE ENGINE.<br>" + e.message;
-            }
-        }
-
-        filePicker.addEventListener('change', function(e) {
-            let file = e.target.files[0];
-            if (file) {
-                let reader = new FileReader();
-                reader.onload = function(event) {
-                    imageElement.src = event.target.target_path;
-                    imageElement.style.display = 'block';
-                    document.getElementById('placeholder').style.display = 'none';
-                    runBtn.disabled = false;
-                    runBtn.style.backgroundColor = "#45a29e";
-                    runBtn.style.color = "#000";
-                    outputBox.innerHTML = "IMAGE LOADED.<br>CLICK 'RUN AI DIAGNOSIS' TO START SCAN ANALYSIS.";
-                }
-                reader.readAsDataURL(file);
-            }
-        });
-
-        // 2. محرك الفحص الذكي محلياً داخل المتصفح
-        async function runInference() {
-            if (!session) return;
-            outputBox.innerHTML = "PROCESSING SCAN ANATOMY... EXTRACTING GRAYSCALE INTENSITIES...";
-            
-            // محاكاة مصفوفة الاحتمالات المعتمدة لنموذجكِ المطور بدقة 95%
-            setTimeout(() => {
-                let classes = ['Glioma (ورم دبقي)', 'Meningioma (ورم سحائي)', 'No Tumor (سليم - لا يوجد ورم)', 'Pituitary (ورم الغدة النخامية)'];
-                // اختيار عشوائي ذكي يحاكي قراءة البكسلات بناء على الموديل
-                let mockConfidences = [95.42, 99.10, 100.00, 99.85];
-                let idx = Math.floor(Math.random() * 4);
-                
-                outputBox.innerHTML = `<span style="color: #66fcf1; font-weight:bold;">FINAL DIAGNOSIS: ${classes[idx]}</span><br>` +
-                                      `CORE VERDICT CONFIDENCE: ${mockConfidences[idx].toFixed(2)}%<br>` +
-                                      `---------------------------------------<br>` +
-                                      `// ANALYSIS COMPLETE // TARGET ANATOMY RESOLVED.`;
-            }, 1200);
-        }
-
-        // انطلاق المحرك فور فتح الصفحة
-        loadModel();
-    </script>
 </body>
 </html>
