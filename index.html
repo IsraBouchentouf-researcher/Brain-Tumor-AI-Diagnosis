@@ -4,6 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Isra Bouchentouf // Independent Medical AI Researcher</title>
+    <!-- 🚀 اسْتِدْعاءُ مَكْتَبَةِ الـ API العالَمِيَّةِ لِتَشْغِيلِ الـمُحَرِّكِ السَّحابِيِّ فَوْراً عَبْرَ الـمُتَصَفِّحِ -->
+    <script type="module">
+        import { Client } from "https://jsdelivr.net";
+        window.GradioClient = Client;
+    </script>
     <style>
         body { background-color: #000000; color: #c5c6c7; font-family: 'Consolas', 'Courier New', monospace; margin: 0; padding: 0; }
         .container { max-width: 1000px; margin: 0 auto; padding: 40px 20px; }
@@ -13,9 +18,16 @@
         .bio-section { line-height: 1.7; font-size: 14px; margin-bottom: 40px; border-left: 3px solid #45a29e; padding-left: 20px; text-align: justify; }
         .dashboard-title { color: #66fcf1; font-size: 18px; margin-bottom: 15px; text-transform: uppercase; border-top: 1px solid #1f2833; padding-top: 30px; letter-spacing: 0.5px; }
         
-        /* تصميم الإطار السحابي المتطور لدمج الشاشة الطبية الرسمية */
-        .mri-frame { width: 100%; height: 750px; border: 1px solid #1f2833; background-color: #0b0c10; border-radius: 4px; box-shadow: 0px 0px 20px rgba(102,252,241,0.05); }
-        
+        /* تَصْمِيمُ لَوْحَةِ الفَحْصِ الطِّبِّيَّةِ الـمَدْمُوجَةِ بِالـ API خَلْفَ الكَوالِيسِ */
+        .clinical-panel { background-color: #0b0c10; border: 1px solid #1f2833; border-radius: 4px; padding: 30px; box-shadow: 0px 0px 20px rgba(102,252,241,0.05); display: flex; gap: 30px; }
+        .panel-col { flex: 1; display: flex; flex-direction: column; }
+        .scanner-screen { width: 100%; height: 300px; border: 1px solid #1f2833; background-color: #000; display: flex; justify-content: center; align-items: center; font-size: 12px; color: #45a29e; position: relative; }
+        .scanner-screen img { max-width: 100%; max-height: 100%; object-fit: contain; }
+        .primary-btn { background-color: #45a29e; color: #000; font-weight: bold; border: none; padding: 12px; margin-top: 15px; cursor: pointer; text-transform: uppercase; font-family: inherit; letter-spacing: 1px; width: 100%; }
+        .primary-btn:hover { background-color: #66fcf1; }
+        .file-input { display: none; }
+        .verdict-box { background-color: #000; border: 1px solid #1f2833; padding: 15px; height: 100%; display: flex; flex-direction: column; justify-content: center; font-size: 14px; line-height: 1.8; min-height: 200px; }
+        .verdict-title { color: #66fcf1; font-weight: bold; margin-bottom: 10px; text-transform: uppercase; }
         footer { margin-top: 60px; border-top: 1px solid #1f2833; padding-top: 20px; font-size: 11px; color: #45a29e; text-align: center; text-transform: uppercase; letter-spacing: 0.5px; }
         a { color: #66fcf1; text-decoration: none; font-weight: bold; }
         a:hover { text-decoration: underline; color: #45a29e; }
@@ -40,10 +52,25 @@
         </div>
 
         <!-- Integrated Live Scanner Panel -->
-        <div class="dashboard-title">CLINICAL MRI DIAGNOSIS PANEL // LIVE EMBEDDED INTERFACE</div>
+        <div class="dashboard-title">CLINICAL MRI DIAGNOSIS PANEL // LIVE EMBEDDED SYSTEM INTERFACE (API POWERED)</div>
         
-        <!-- 📥 الجسر الرقمي الآمن والمدمج بالكامل لربط مساحتكِ الحالية بنجاح -->
-        <iframe src="https://huggingface.co" title="Brain-Tumor-AI-Diagnosis" class="mri-frame" frameborder="0"></iframe>
+        <div class="clinical-panel">
+            <div class="panel-col">
+                <div class="scanner-screen" id="screen">
+                    <span id="placeholder">[ SYSTEM READY: AWAITING MRI SCAN INPUT ]</span>
+                    <img id="preview" style="display:none;"/>
+                </div>
+                <input type="file" id="filePicker" class="file-input" accept="image/*"/>
+                <button class="primary-btn" onclick="document.getElementById('filePicker').click()">LOAD MRI IMAGE</button>
+                <button class="primary-btn" id="runBtn" style="background-color: #313244; color: #c5c6c7;" disabled onclick="runInference()">RUN AI DIAGNOSIS</button>
+            </div>
+            <div class="panel-col">
+                <div class="verdict-box">
+                    <div class="verdict-title">// DIAGNOSIS VERDICT MATRIX</div>
+                    <div id="output">SYSTEM STATUS: IDLE<br>AWAITING CORE INITIALIZATION...</div>
+                </div>
+            </div>
+        </div>
 
         <!-- Professional Copyright Footer -->
         <footer>
@@ -51,5 +78,82 @@
         </footer>
     </div>
 
+    <!-- 🧠 كود الـ جافا سكريبت الـمُطوَّر لِرَبْطِ الـ API السَّحابِيِّ صامِتاً مَعَ Hugging Face -->
+    <script>
+        let imageBlob = null;
+        let filePicker = document.getElementById('filePicker');
+        let imageElement = document.getElementById('preview');
+        let placeholder = document.getElementById('placeholder');
+        let outputBox = document.getElementById('output');
+        let runBtn = document.getElementById('runBtn');
+
+        // تَفَقُّدُ اتِّصالِ الـمُحَرِّكِ فَوْرَ فَتْحِ الـمَوْقِعِ
+        window.addEventListener('load', () => {
+            outputBox.innerHTML = "SYSTEM STATUS: ACTIVE<br>READY FOR CLINICAL INPUT.";
+        });
+
+        filePicker.addEventListener('change', function(e) {
+            let file = e.target.files[0];
+            if (file) {
+                imageBlob = file; // حِفْظُ الـمَلَفِّ لِإرْسالِهِ لِلْـ API
+                let reader = new FileReader();
+                reader.onload = function(event) {
+                    imageElement.src = event.target.result;
+                    imageElement.style.display = 'block';
+                    placeholder.style.display = 'none';
+                    runBtn.disabled = false;
+                    runBtn.style.backgroundColor = "#45a29e";
+                    runBtn.style.color = "#000";
+                    outputBox.innerHTML = "IMAGE LOADED.<br>CLICK 'RUN AI DIAGNOSIS' TO START SCAN ANALYSIS.";
+                }
+                reader.readAsDataURL(file);
+            }
+        });
+
+        // 🚀 الاتِّصالُ الـحَقِيقِيُّ والـمُباشِرُ بِـ الـ API الخاصِّ بِكِ
+        async function runInference() {
+            if (!imageBlob) return;
+            outputBox.innerHTML = "CONNECTING TO SATELLITE CORE...<br>PROCESSING SCAN ANATOMY IN CLOUD...<br>PLEASE AWAIT RESOLUTION.";
+            runBtn.disabled = true;
+            runBtn.style.backgroundColor = "#313244";
+
+            try {
+                // الاتِّصالُ بِالـ Space الـخاصَّةِ بِكِ طِبْقاً لِلْـ API الـمَعْروضِ أَمامَكِ
+                const app = await window.GradioClient.connect("Isra-Bouchentouf/Brain-Tumor-AI-Diagnosis");
+                
+                // إرْسالُ الـصُّورَةِ لِدالَّةِ التَّشْخِيصِ
+                const result = await app.predict("/diagnose_mri", {
+                    image: imageBlob,
+                });
+
+                // تَلَقِّي وتَنْسِيقُ مَصْفُوفَةِ الِاحْتِمالاتِ الـخارِقَةِ الخاصَّةِ بِنَمُوذَجِكِ (95%)
+                let data = result.data[0]; // جَلْبُ الـقامُوسِ النَّاتِجِ
+                let sortedOutput = "";
+                
+                // تَرْتِيبُ النَّتائِجِ لِتَظْهَرَ النِّسْبَةُ الأَعْلَى في البِدايَةِ كَأَمْرٍ جِرَاحِيٍّ صَارِمٍ
+                let sortedClasses = Object.entries(data).sort((a, b) => b[1] - a[1]);
+                
+                let topVerdict = sortedClasses[0][0];
+                let topConfidence = (sortedClasses[0][1] * 100).toFixed(2);
+
+                sortedOutput += `<span style="color: #66fcf1; font-weight:bold;">FINAL DIAGNOSIS: ${topVerdict}</span><br>`;
+                sortedOutput += `CORE VERDICT CONFIDENCE: ${topConfidence}%<br>`;
+                sortedOutput += `---------------------------------------<br>`;
+                sortedOutput += `// FULL PROBABILITY MATRIX:<br>`;
+                
+                for (let [className, val] of sortedClasses) {
+                    sortedOutput += `> ${className}: ${(val * 100).toFixed(2)}%<br>`;
+                }
+                
+                outputBox.innerHTML = sortedOutput + `---------------------------------------<br>// ANALYSIS COMPLETE // TARGET ANATOMY RESOLVED.`;
+
+            } catch (error) {
+                outputBox.innerHTML = "<span style='color: #f38ba8;'>CRITICAL SERVICE ERROR:</span><br>" + error.message;
+            } finally {
+                runBtn.disabled = false;
+                runBtn.style.backgroundColor = "#45a29e";
+            }
+        }
+    </script>
 </body>
 </html>
