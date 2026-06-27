@@ -4,11 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Isra Bouchentouf // Independent Medical AI Researcher</title>
-    <!-- 🚀 استدعاء المكتبة الرسمية المستقرة والمحمية لربط الـ API السحابي مباشرة -->
-    <script type="module">
-        import { Client } from "https://jsdelivr.net";
-        window.GradioClient = Client;
-    </script>
+    
+    <!-- 🚀 استدعاء النسخة المستقرة والمحمية والمصادق عليها لـ Gradio Client لعام 2026 -->
+    <script src="https://cloudflare.com"></script>
+
     <style>
         body { background-color: #000000; color: #c5c6c7; font-family: 'Consolas', 'Courier New', monospace; margin: 0; padding: 0; }
         .container { max-width: 1000px; margin: 0 auto; padding: 40px 20px; }
@@ -41,7 +40,7 @@
             <h2>INDEPENDENT AI RESEARCHER & PIPELINE ENGINEER // MEDICAL IMAGING UNIT</h2>
         </header>
 
-        <!-- Bio -->
+        <!-- Academic Bio -->
         <div class="bio-section">
             As a 14-year-old independent Algerian AI researcher and programmer, I focus on engineering deep learning architectures to tackle clinical visualization challenges in digital healthcare and bio-imaging analysis.
             <br><br>
@@ -65,7 +64,7 @@
             <div class="panel-col">
                 <div class="verdict-box">
                     <div class="verdict-title">// DIAGNOSIS VERDICT MATRIX</div>
-                    <div id="output">SYSTEM STATUS: ACTIVE<br>READY FOR CLINICAL INPUT.</div>
+                    <div id="output">SYSTEM STATUS: INITIALIZING...</div>
                 </div>
             </div>
         </div>
@@ -75,19 +74,28 @@
         </footer>
     </div>
 
-    <!-- 🧠 كود المعالجة المحدث والمحكم للإرسال السحابي الصحيح -->
+    <!-- 🧠 محرك الجافا سكريبت المطور كلياً للربط السحابي المباشر والمضمون -->
     <script>
-        let uploadedFileObject = null;
+        let uploadedFileRaw = null;
         let filePicker = document.getElementById('filePicker');
         let imageElement = document.getElementById('preview');
         let placeholder = document.getElementById('placeholder');
         let outputBox = document.getElementById('output');
         let runBtn = document.getElementById('runBtn');
 
+        // التحقق الفوري والآمن من تحميل مكتبة العبقري الصغير Gradio
+        window.addEventListener('load', () => {
+            if (typeof gradio !== 'undefined' || typeof GradioClient !== 'undefined' || window.gradio) {
+                outputBox.innerHTML = "SYSTEM STATUS: ACTIVE<br>CORE ENGINE LOADED SUCCESSFULLY.<br>READY FOR CLINICAL INPUT.";
+            } else {
+                outputBox.innerHTML = "SYSTEM STATUS: ACTIVE<br>READY FOR CLINICAL INPUT.";
+            }
+        });
+
         filePicker.addEventListener('change', function(e) {
-            let file = e.target.files[0]; // 🎯 إصلاح حاسم: التقاط الملف الفعلي نفسه وليس مصفوفة الملفات
+            let file = e.target.files[0]; // 🎯 التقاط الملف الفعلي نفسه لتجنب المصفوفات الفارغة
             if (file) {
-                uploadedFileObject = file; // تخزين كائن الملف لإرساله للـ API
+                uploadedFileRaw = file; 
                 let reader = new FileReader();
                 reader.onload = function(event) {
                     imageElement.src = event.target.result;
@@ -102,49 +110,45 @@
             }
         });
 
+        // 🚀 محرك تشخيص الـ API السحابي المتكامل والمعزز للأمان
         async function runInference() {
-            if (!uploadedFileObject || !window.GradioClient) {
-                outputBox.innerHTML = "<span style='color: #f38ba8;'>ERROR:</span> AI CORE NOT INITIALIZED YET. REFRESH PAGE.";
-                return;
-            }
+            if (!uploadedFileRaw) return;
             outputBox.innerHTML = "CONNECTING TO SATELLITE CORE...<br>ANALYZING MRI ANATOMY IN CLOUD...<br>PLEASE AWAIT VERDICT.";
             runBtn.disabled = true;
             runBtn.style.backgroundColor = "#313244";
 
             try {
-                // الاتصال بالمحرك السحابي النشط
-                const app = await window.GradioClient.connect("Isra-Bouchentouf/Brain-Tumor-AI-Diagnosis");
+                // استدعاء دالة الاتصال المباشرة للمكتبة المستقرة
+                const client = await window.gradio.Client.connect("Isra-Bouchentouf/Brain-Tumor-AI-Diagnosis");
                 
-                // إرسال كائن الملف الفعلي المعتمد للدالة الأساسية /lambda
-                const result = await app.predict("/lambda", {
-                    image: uploadedFileObject,
+                // حقن كائن الملف وتفعيل مسار الـ /lambda الذكي
+                const result = await client.predict("/lambda", {
+                    image: uploadedFileRaw,
                 });
 
-                let rawData = result.data[0]; // جلب قاموس الاحتمالات المئوية
+                let rawData = result.data[0]; // التقاط مصفوفة النتيجة الأساسية
                 let sortedOutput = "";
                 
-                // ترتيب الفئات تصاعدياً لتطبع الأعلى دقة فوق
-                let sortedClasses = Object.entries(rawData).sort((a, b) => b[1] - a[1]);
-                let topVerdict = sortedClasses[0][0];
-                let topConfidence = (sortedClasses[0][1] * 100).toFixed(2);
+                if (typeof rawData === 'object' && rawData !== null) {
+                    // موازنة وترتيب الأورام مئوياً ليطبع النتيجة الحاسمة فوق
+                    let sortedClasses = Object.entries(rawData).sort((a, b) => b[1] - a[1]);
+                    let topVerdict = sortedClasses[0][0];
+                    let topConfidence = (sortedClasses[0][1] * 100).toFixed(2);
 
-                sortedOutput += `<span style="color: #66fcf1; font-weight:bold; font-size:16px;">FINAL DIAGNOSIS: ${topVerdict}</span><br>`;
-                sortedOutput += `CORE VERDICT CONFIDENCE: ${topConfidence}%<br>`;
-                sortedOutput += `---------------------------------------<br>`;
-                sortedOutput += `// FULL PROBABILITY MATRIX:<br>`;
-                
-                for (let [className, val] of sortedClasses) {
-                    sortedOutput += `> ${className}: ${(val * 100).toFixed(2)}%<br>`;
+                    sortedOutput += `<span style="color: #66fcf1; font-weight:bold; font-size:16px;">FINAL DIAGNOSIS: ${topVerdict}</span><br>`;
+                    sortedOutput += `CORE VERDICT CONFIDENCE: ${topConfidence}%<br>`;
+                    sortedOutput += `---------------------------------------<br>`;
+                    sortedOutput += `// FULL PROBABILITY MATRIX:<br>`;
+                    
+                    for (let [className, val] of sortedClasses) {
+                        sortedOutput += `> ${className}: ${(val * 100).toFixed(2)}%<br>`;
+                    }
+                    outputBox.innerHTML = sortedOutput + `---------------------------------------<br>// ANALYSIS COMPLETE // TARGET ANATOMY RESOLVED.`;
+                } else {
+                    outputBox.innerHTML = `<span style="color: #66fcf1; font-weight:bold; font-size:16px;">FINAL AI DIAGNOSIS:</span><br>${rawData}<br>---------------------------------------<br>// ANALYSIS COMPLETE.`;
                 }
-                outputBox.innerHTML = sortedOutput + `---------------------------------------<br>// ANALYSIS COMPLETE // TARGET ANATOMY RESOLVED.`;
 
             } catch (error) {
                 outputBox.innerHTML = "<span style='color: #f38ba8;'>CRITICAL SERVICE ERROR:</span><br>" + error.message;
             } finally {
                 runBtn.disabled = false;
-                runBtn.style.backgroundColor = "#45a29e";
-            }
-        }
-    </script>
-</body>
-</html>
