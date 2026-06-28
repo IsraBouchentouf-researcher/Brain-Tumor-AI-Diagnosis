@@ -21,6 +21,3 @@ Tested rigorously on a validation dataset of 1,600 unseen clinical MRI images, t
 The trained model weights are deployed into a live interactive production environment. You can upload an MRI scan and see the model analyze it in real-time here:
 
 🌐 Live AI Platform: https://huggingface.co/spaces/Isra-Bouchentouf/Brain-Tumor-AI-Diagnosis
-
----
-Independent Medical AI Research Hub // All Rights Reserved.
